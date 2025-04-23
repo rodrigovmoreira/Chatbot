@@ -64,12 +64,12 @@ client.on('message', async msg => {
         await delay(3000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
         await chat.sendStateTyping(); // Simulando Digitação
         await delay(3000);
-        await client.sendMessage(msg.from, '*Plano Individual:* R$22,50 por mês.\n\n*Plano Família:* R$39,90 por mês, inclui você mais 3 dependentes.\n\n*Plano TOP Individual:* R$42,50 por mês, com benefícios adicionais como\n\n*Plano TOP Família:* R$79,90 por mês, inclui você mais 3 dependentes');
+        await client.sendMessage(msg.from, 'Fui feito em Javascript, com a biblioteca whatsapp-web.js.\n\nSou um assistente virtual que está dando os primeiros passos!');
 
         await delay(3000); //delay de 3 segundos
         await chat.sendStateTyping(); // Simulando Digitação
         await delay(3000);
-        await client.sendMessage(msg.from, 'Link para cadastro: https://site.com');
+        await client.sendMessage(msg.from, 'Ajude a melhorar o que possuo: https://github.com/rodrigovmoreira/Chatbot');
     }
 
     if (msg.body !== null && msg.body === '3' && msg.from.endsWith('@c.us')) {
@@ -79,12 +79,12 @@ client.on('message', async msg => {
         await delay(3000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
         await chat.sendStateTyping(); // Simulando Digitação
         await delay(3000);
-        await client.sendMessage(msg.from, 'Sorteio de em prêmios todo ano.\n\nAtendimento médico ilimitado 24h por dia.\n\nReceitas de medicamentos');
+        await client.sendMessage(msg.from, 'Sim, tenho benefícios! Você pode me ajudar a melhorar minhas respostas e tornar minha experiência mais útil para você.\n\nAlém disso, estou sempre aprendendo e melhorando!');
         
         await delay(3000); //delay de 3 segundos
         await chat.sendStateTyping(); // Simulando Digitação
         await delay(3000);
-        await client.sendMessage(msg.from, 'Link para cadastro: https://site.com');
+        await client.sendMessage(msg.from, 'E se a gente incluisse um banco de dados? https://www.mongodb.com/');
 
     }
 
@@ -94,13 +94,13 @@ client.on('message', async msg => {
         await delay(3000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
         await chat.sendStateTyping(); // Simulando Digitação
         await delay(3000);
-        await client.sendMessage(msg.from, 'Você pode aderir aos nossos planos diretamente pelo nosso site ou pelo WhatsApp.\n\nApós a adesão, você terá acesso imediato');
+        await client.sendMessage(msg.from, 'Inventei essas respostas e ainda usei o Github Copilot para me ajudar a criar esses textos.');
 
 
         await delay(3000); //delay de 3 segundos
         await chat.sendStateTyping(); // Simulando Digitação
         await delay(3000);
-        await client.sendMessage(msg.from, 'Link para cadastro: https://site.com');
+        await client.sendMessage(msg.from, 'Volta o chat e pega o link!');
 
 
     }
@@ -111,7 +111,7 @@ client.on('message', async msg => {
         await delay(3000); //Delay de 3000 milisegundos mais conhecido como 3 segundos
         await chat.sendStateTyping(); // Simulando Digitação
         await delay(3000);
-        await client.sendMessage(msg.from, 'Se você tiver outras dúvidas ou precisar de mais informações, por favor, fale aqui nesse whatsapp ou visite nosso site: https://site.com ');
+        await client.sendMessage(msg.from, 'Te desejo o mesmo!');
 
 
     }
