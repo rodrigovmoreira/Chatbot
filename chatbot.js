@@ -42,7 +42,7 @@ client.on('message', async msg => {
         await delay(3000); //delay de 3 segundos
         await chat.sendStateTyping(); // Simulando Digitação..
         await delay(3000);
-        await client.sendMessage(msg.from, 'Sou um assistente virtual que pode ajudar a responder perguntas e fornecer informações sobre nossos serviços.\n\nEstou aqui para ajudar você a encontrar o que precisa e tornar sua experiência mais fácil e rápida.\n\nNão sou perfeito, mas estou sempre aprendendo e melhorando!');
+        await client.sendMessage(msg.from, 'Sou um assistente virtual que pode ajudar a responder perguntas e fornecer informações sobre nossos serviços.\nEstou aqui para ajudar você a encontrar o que precisa e tornar sua experiência mais fácil e rápida.\n\nNão sou perfeito, mas estou sempre aprendendo e melhorando!');
 
         await delay(3000); //delay de 3 segundos
         await chat.sendStateTyping(); // Simulando Digitação
@@ -52,8 +52,25 @@ client.on('message', async msg => {
         await delay(3000); //delay de 3 segundos
         await chat.sendStateTyping(); // Simulando Digitação
         await delay(3000);
-        await client.sendMessage(msg.from, 'Quer ver meu código? Aqui está: https://github.com/rodrigovmoreira/Chatbot');
+        await client.sendMessage(msg.from, 'Quer ver meu código? Aqui está: https://github.com/rodrigovmoreira/Chatbot\n Digite sim para saber como instalar o projeto e utilizar o bot.');
+        await delay(3000); //delay de 3 segundos
+        await chat.sendStateTyping(); // Simulando Digitação
+        await delay(5000); //Delay de 5 segundos
 
+        if (msg.body !== null && msg.body === 'sim' && msg.from.endsWith('@c.us')) {
+            const chat = await msg.getChat();
+    
+            await delay(3000); // Delay de 3 segundos
+            await chat.sendStateTyping(); // Simulando Digitação
+            await delay(3000);
+            await client.sendMessage(msg.from, 'Você precisa instalar o VsCode e o Node.js.\n\nDepois disso, você pode clonar o repositório e instalar as dependências usando o comando npm install.\n\nEm seguida, você pode executar o bot usando o comando npm start.');
+    
+            await delay(3000); // Delay de 3 segundos
+            await chat.sendStateTyping(); // Simulando Digitação
+            await delay(3000);
+            await client.sendMessage(msg.from, 'Lembrando que esse é o repositório do bot: https://github.com/rodrigovmoreira/Chatbot');
+        
+        }
 
     }
 
