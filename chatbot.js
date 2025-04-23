@@ -52,7 +52,7 @@ client.on('message', async msg => {
         await delay(3000); //delay de 3 segundos
         await chat.sendStateTyping(); // Simulando Digitação
         await delay(3000);
-        await client.sendMessage(msg.from, 'Quer ver meu código? Aqui está:');
+        await client.sendMessage(msg.from, 'Quer ver meu código? Aqui está: https://github.com/rodrigovmoreira/Chatbot');
 
 
     }
