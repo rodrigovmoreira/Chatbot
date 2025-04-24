@@ -22,3 +22,6 @@ Thumbs.db
 
 # Ignore wwebjs_cache folder
 .wwebjs_cache/
+
+# Ignore txt files
+*.txt

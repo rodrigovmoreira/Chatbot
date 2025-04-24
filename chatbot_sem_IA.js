@@ -1,19 +1,6 @@
-import OpenAI from 'openai';
 const qrcode = require('qrcode-terminal');
 const { Client } = require('whatsapp-web.js');
 const client = new Client();
-const axios = require('axios');
-
-const openai = new OpenAI({
-    baseURL: 'https://api.deepseek.com/v1/chat/completions',
-    apiKey: 'sk-0ae21ea044344d4dbd6c4364bb903888', // Substitua pela sua chave
-});
-
-
-// // Configuração da IA (DeepSeek Chat API)
-// const DEEPSEEK_API_URL = "https://api.deepseek.com/chat/completions"; // Exemplo fictício - verifique a API real
-// const API_KEY = "sk-0ae21ea044344d4dbd6c4364bb903888"; // Substitua pela sua chave
-
 
 // Serviço de leitura do QR Code
 client.on('qr', qr => {
@@ -32,31 +19,6 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 const userStates = {};
 
 // Funções de resposta modularizadas
-
-// Função para gerar resposta da IA
-async function generateAIResponse() {
-
-
-
-    // try {
-    //     const response = await axios.post(DEEPSEEK_API_URL, {
-    //         model: "deepseek-chat",
-    //         messages: [{ role: "user", content: prompt }],
-    //         temperature: 0.7,
-    //     }, {
-    //         headers: { "Authorization": `Bearer ${API_KEY}` }
-    //     });
-
-    //     return response.data.choices[0].message.content;
-    // } catch (error) {
-    //     console.error("Erro na IA:", error);
-    //     return "Desculpe, estou tendo dificuldades. Podemos tentar de novo?";
-    // }
-
-
-
-}
-
 async function sendMenu(msg, name) {
     const chat = await msg.getChat();
     await delay(2500);
@@ -77,7 +39,7 @@ client.on('message', async msg => {
     const contact = await msg.getContact();
     const name = contact.pushname;
     const userState = userStates[msg.from];
-    const userMessage = msg.body.toLowerCase();
+    const body = msg.body.toLowerCase(); // Normaliza para minúsculas
 
     // 1. Primeiro verifica estados pendentes
     if (userState?.awaiting === 'sim_instrucoes') {
@@ -123,21 +85,11 @@ client.on('message', async msg => {
     }
 
     // 2. Depois verifica comandos de menu (regex corrigida)
-    if (userMessage.match(/^(menu|ola|oi|voltar|[1-5])$/i)) {
+    if (body.match(/^(menu|ola|oi|olá|voltar)$/i)) {
         await sendMenu(msg, name);
         return;
     }
 
-    // 2.1. Se não for um comando, use IA para resposta fluída
-    await chat.sendStateTyping();
-
-    const context = `Você é um chatbot chamado MoreiraBot. O usuário ${name} disse: "${msg.body}". Responda de forma natural e útil.`;
-    const aiResponse = await generateAIResponse(context);
-
-    await delay(2000);
-    await client.sendMessage(msg.from, aiResponse);
-
-    
     // 3. Por último, opções numéricas
     switch (msg.body) {
         case '1':
