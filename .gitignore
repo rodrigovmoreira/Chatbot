@@ -19,3 +19,6 @@ Thumbs.db
 .vscode/
 .idea/
 *.iml
+
+# Ignore wwebjs_cache folder
+.wwebjs_cache/
