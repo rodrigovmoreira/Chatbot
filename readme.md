@@ -24,7 +24,6 @@ Um chatbot inteligente desenvolvido em **Node.js** usando a biblioteca [whatsapp
 
 ## 🛠 Tecnologias Utilizadas
 
-```mermaid
 pie
     title Stack Tecnológica
     "Node.js" : 45
