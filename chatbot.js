@@ -6,7 +6,7 @@ const axios = require('axios');
 
 const AI_CONFIG = {
     API_KEY: "sk-0ae21ea044344d4dbd6c4364bb903888", // Substitua pela chave que já testou
-    API_URL: "https://api.openai.com/v1/chat/completions", // Ou URL da API que você usou
+    API_URL: "https://api.deepseek.com/v1/chat/completions", // Ou URL da API que você usou
     MODEL: "deepseek-chat",
     MAX_TOKENS: 150 // Limita o tamanho da resposta para economizar créditos
 };
