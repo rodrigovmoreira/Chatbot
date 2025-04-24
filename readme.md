@@ -1,29 +1,49 @@
-# README
+Chatbot para WhatsApp 🤖
+Um chatbot simples desenvolvido em Node.js usando a biblioteca whatsapp-web.js para interagir com usuários no WhatsApp.
 
-## Project Overview
-This branch is part of a larger project aimed at [briefly describe the purpose of the project]. It contains specific features, updates, or experiments that contribute to the overall development.
+⚙️ Funcionalidades
+Menu interativo com 5 opções:
+1️⃣ Como funciono – Explica o propósito do bot e oferece instruções de instalação.
+2️⃣ Por que sou simples? – Detalha a tecnologia usada e menciona ferramentas de IA.
+3️⃣ Benefícios – Mostra vantagens e como contribuir para melhorias.
+4️⃣ Como melhorar – Sugere integração com MongoDB para histórico de conversas.
+5️⃣ Palavrão – Captura e repete uma mensagem do usuário (com humor).
 
-## Features in This Branch
-- [Feature 1]: [Brief description]
-- [Feature 2]: [Brief description]
-- [Feature 3]: [Brief description]
+Respostas dinâmicas com typing indicators (simulação de digitação).
 
-## How to Use
-1. Clone the repository:
-    ```bash
-    git clone [repository-url]
-    ```
-2. Checkout this branch:
-    ```bash
-    git checkout [branch-name]
-    ```
-3. Follow the project setup instructions in the main README file.
+Controle de estados para fluxos de conversa (ex.: após escolher "1", aguarda "sim" ou "voltar").
 
-## Contributing
-Contributions to this branch are welcome. Please ensure your changes align with the project's guidelines and submit a pull request for review.
+🛠️ Tecnologias
+Node.js (Backend)
 
-## License
-This project is licensed under the [License Name]. See the LICENSE file for details.
+whatsapp-web.js (Conexão com WhatsApp)
 
-## Contact
-For questions or feedback, please reach out to [contact information].
+qrcode-terminal (Autenticação via QR Code)
+
+▶️ Como Executar
+Clone o repositório:
+
+bash
+git clone https://github.com/rodrigovmoreira/Chatbot.git
+cd Chatbot
+Instale as dependências:
+
+bash
+npm install
+Inicie o bot:
+
+bash
+npm start
+Escaneie o QR Code no WhatsApp Web.
+
+📌 Melhorias Futuras
+Adicionar banco de dados (MongoDB) para histórico.
+
+Implementar NLP (ex.: Dialogflow) para entender linguagem natural.
+
+Criar painel administrativo para visualizar interações.
+
+🔗 Repositório: github.com/rodrigovmoreira/Chatbot
+
+Feito com JavaScript e 🤍 por Rodrigo Moreira.
+Contribuições são bem-vindas! 🚀
