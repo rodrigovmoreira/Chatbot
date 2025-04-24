@@ -1,14 +1,17 @@
-// import OpenAI from 'openai';
+
+// import DeepSeek from 'deepseek'
 const qrcode = require('qrcode-terminal');
 const { Client } = require('whatsapp-web.js');
 const client = new Client();
 const axios = require('axios');
+require('dotenv').config();
+
 
 const AI_CONFIG = {
-    API_KEY: "sk-0ae21ea044344d4dbd6c4364bb903888", // Substitua pela chave que já testou
+    API_KEY: process.env.DEEPSEEK_API_KEY, // Agora seguro
     API_URL: "https://api.deepseek.com/v1/chat/completions", // Ou URL da API que você usou
     MODEL: "deepseek-chat",
-    MAX_TOKENS: 150 // Limita o tamanho da resposta para economizar créditos
+    MAX_TOKENS: 250 // Limita o tamanho da resposta para economizar créditos
 };
 
 
@@ -35,7 +38,6 @@ async function generateAIResponse(userMessage, context = "") {
 
     try {
         const prompt = `Contexto: ${context}\n\nUsuário: ${userMessage}\nChatbot (responda breve e naturalmente):`;
-
         const response = await axios.post(
             AI_CONFIG.API_URL,
             {
@@ -51,13 +53,11 @@ async function generateAIResponse(userMessage, context = "") {
                 }
             }
         );
-
         return response.data.choices[0].message.content.trim();
     } catch (error) {
         console.error("Erro na IA (fallback para resposta padrão):", error.message);
         return null; // Retorna null para usar respostas pré-definidas
     }
-
 }
 
 async function sendMenu(msg, name) {
@@ -134,7 +134,7 @@ client.on('message', async msg => {
     }
 
     // 2.1. Se não for um comando, use IA para resposta fluída
-    if (msg.body.split(' ').length > 3 || msg.body.includes('?')) {
+    if ((msg.body.split(' ').length > 0 && !(userMessage.match(/^(menu|ola|oi|voltar|[1-5])$/i)))|| msg.body.includes('?')) {
         await chat.sendStateTyping();
 
         // 2.1 Tenta gerar resposta via IA (com fallback)
