@@ -1,18 +1,15 @@
-import OpenAI from 'openai';
+// import OpenAI from 'openai';
 const qrcode = require('qrcode-terminal');
 const { Client } = require('whatsapp-web.js');
 const client = new Client();
 const axios = require('axios');
 
-const openai = new OpenAI({
-    baseURL: 'https://api.deepseek.com/v1/chat/completions',
-    apiKey: 'sk-0ae21ea044344d4dbd6c4364bb903888', // Substitua pela sua chave
-});
-
-
-// // Configuração da IA (DeepSeek Chat API)
-// const DEEPSEEK_API_URL = "https://api.deepseek.com/chat/completions"; // Exemplo fictício - verifique a API real
-// const API_KEY = "sk-0ae21ea044344d4dbd6c4364bb903888"; // Substitua pela sua chave
+const AI_CONFIG = {
+    API_KEY: "sk-0ae21ea044344d4dbd6c4364bb903888", // Substitua pela chave que já testou
+    API_URL: "https://api.openai.com/v1/chat/completions", // Ou URL da API que você usou
+    MODEL: "deepseek-chat",
+    MAX_TOKENS: 150 // Limita o tamanho da resposta para economizar créditos
+};
 
 
 // Serviço de leitura do QR Code
@@ -34,26 +31,32 @@ const userStates = {};
 // Funções de resposta modularizadas
 
 // Função para gerar resposta da IA
-async function generateAIResponse() {
+async function generateAIResponse(userMessage, context = "") {
 
+    try {
+        const prompt = `Contexto: ${context}\n\nUsuário: ${userMessage}\nChatbot (responda breve e naturalmente):`;
 
+        const response = await axios.post(
+            AI_CONFIG.API_URL,
+            {
+                model: AI_CONFIG.MODEL,
+                messages: [{ role: "user", content: prompt }],
+                max_tokens: AI_CONFIG.MAX_TOKENS,
+                temperature: 0.7,
+            },
+            {
+                headers: {
+                    "Authorization": `Bearer ${AI_CONFIG.API_KEY}`,
+                    "Content-Type": "application/json"
+                }
+            }
+        );
 
-    // try {
-    //     const response = await axios.post(DEEPSEEK_API_URL, {
-    //         model: "deepseek-chat",
-    //         messages: [{ role: "user", content: prompt }],
-    //         temperature: 0.7,
-    //     }, {
-    //         headers: { "Authorization": `Bearer ${API_KEY}` }
-    //     });
-
-    //     return response.data.choices[0].message.content;
-    // } catch (error) {
-    //     console.error("Erro na IA:", error);
-    //     return "Desculpe, estou tendo dificuldades. Podemos tentar de novo?";
-    // }
-
-
+        return response.data.choices[0].message.content.trim();
+    } catch (error) {
+        console.error("Erro na IA (fallback para resposta padrão):", error.message);
+        return null; // Retorna null para usar respostas pré-definidas
+    }
 
 }
 
@@ -123,21 +126,28 @@ client.on('message', async msg => {
     }
 
     // 2. Depois verifica comandos de menu (regex corrigida)
-    if (userMessage.match(/^(menu|ola|oi|voltar|[1-5])$/i)) {
+    if (userMessage.match(/^(menu|ola|oi|voltar)$/i)) {
         await sendMenu(msg, name);
         return;
+    } else if (userMessage.match(/^(menu|ola|oi|voltar|[1-5])$/i)) {
+        await client.sendMessage(msg.from, "Digite *menu* para opções ou faça uma pergunta mais detalhada!");
     }
 
     // 2.1. Se não for um comando, use IA para resposta fluída
-    await chat.sendStateTyping();
+    if (msg.body.split(' ').length > 3 || msg.body.includes('?')) {
+        await chat.sendStateTyping();
 
-    const context = `Você é um chatbot chamado MoreiraBot. O usuário ${name} disse: "${msg.body}". Responda de forma natural e útil.`;
-    const aiResponse = await generateAIResponse(context);
+        // 2.1 Tenta gerar resposta via IA (com fallback)
+        const aiResponse = await generateAIResponse(msg.body, "Você é um chatbot útil chamado MoreiraBot.");
 
-    await delay(2000);
-    await client.sendMessage(msg.from, aiResponse);
+        if (aiResponse) {
+            await client.sendMessage(msg.from, aiResponse);
+        } else {
+            await client.sendMessage(msg.from, "🤖 Pode reformular? Estou aprendendo ainda!");
+        }
+        return;
+    }
 
-    
     // 3. Por último, opções numéricas
     switch (msg.body) {
         case '1':
