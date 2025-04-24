@@ -16,7 +16,7 @@ Um chatbot inteligente desenvolvido em **Node.js** usando a biblioteca [whatsapp
 | **Integração com APIs** | Pronto para expansão |
 
 ### 📋 Opções do Menu
-1. `Como funciono` - Explica a tecnologia do bot
+1. `Como funciono?` - Explica a tecnologia do bot
 2. `Por que sou simples?` - Detalhes técnicos
 3. `Benefícios` - Vantagens de usar o bot
 4. `Como melhorar` - Sugestões de evolução

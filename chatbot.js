@@ -27,7 +27,7 @@ async function sendMenu(msg, name) {
     await client.sendMessage(
         msg.from,
         `Olá ${name.split(" ")[0]}! Sou o chatbot do Rodrigo Moreira. Escolha uma opção:\n\n` +
-        '1 - Como funciono\n2 - Por que sou simples?\n3 - Benefícios\n4 - Como melhorar\n5 - Palavrão'
+        '1 - Como funciono?\n2 - Por que sou simples?\n3 - Benefícios\n4 - Como melhorar\n5 - Palavrão'
     );
 }
 
