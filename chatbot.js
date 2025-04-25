@@ -84,7 +84,7 @@ client.on('message', async msg => {
 
     // 1. Primeiro verifica estados pendentes
     if (userState?.awaiting === 'sim_instrucoes') {
-        if (body === 'sim' || body === 's') {
+        if (userMessage === 'sim' || userMessage === 's') {
             await chat.sendStateTyping();
             await delay(2500);
             await client.sendMessage(
@@ -93,14 +93,15 @@ client.on('message', async msg => {
             );
             delete userStates[msg.from];
             return;
-        } else if (body === 'voltar') {
+        } else if (userMessage === 'voltar') {
             delete userStates[msg.from];
             await sendMenu(msg, name);
             return;
         }
     }
 
-    if (userState?.awaiting === 'ia_instrucoes' && body === 'ia') {
+    if (userState?.awaiting === 'ia_instrucoes' && userMessage.includes('ia')) {
+            
         await chat.sendStateTyping();
         await delay(2500);
         await client.sendMessage(msg.from, 'Ferramentas de IA que me ajudaram:\n\n- DeepSeek: https://chat.deepseek.com\n- GitHub Copilot: https://github.com/features/copilot');
@@ -108,7 +109,7 @@ client.on('message', async msg => {
         return;
     }
 
-    if (userState?.awaiting === 'mongo_sera' && body.includes('mong')) {
+    if (userState?.awaiting === 'mongo_sera' && userMessage.includes('mong')) {
         await chat.sendStateTyping();
         await delay(2500);
         await client.sendMessage(msg.from, 'Sim! MongoDB é ideal para:\n- Histórico de conversas\n- Dados não estruturados\n- Escalabilidade\n\nVeja mais: https://www.mongodb.com/');
