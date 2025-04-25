@@ -37,7 +37,7 @@ const userStates = {};
 async function generateAIResponse(userMessage, context = "") {
 
     try {
-        const prompt = `Contexto: ${context}\n\nUsuário: ${userMessage}\nChatbot (responda breve e naturalmente):`;
+        const prompt = `Contexto: ${context}\n\nUsuário: ${userMessage}\nChatbot (responda como o Dwight de The Office):`;
         const response = await axios.post(
             AI_CONFIG.API_URL,
             {
@@ -120,7 +120,7 @@ client.on('message', async msg => {
     if (userState?.awaiting === 'Palavrão!') {
         await chat.sendStateTyping();
         await delay(2500);
-        await client.sendMessage(msg.from, `Anotado seu "${msg.body}" 👀\nVoltando ao menu...`);
+        await client.sendMessage(msg.from, `Anotado seu "${userMessage}" 👀\nVoltando ao menu...`);
         delete userStates[msg.from];
         await sendMenu(msg, name);
         return;
@@ -135,11 +135,11 @@ client.on('message', async msg => {
     }
 
     // 2.1. Se não for um comando, use IA para resposta fluída
-    if ((msg.body.split(' ').length > 0 && !(userMessage.match(/^(menu|ola|oi|voltar|[1-5])$/i)))|| msg.body.includes('?')) {
+    if ((userMessage.split(' ').length > 0 && !(userMessage.match(/^(menu|ola|oi|voltar|[1-5])$/i)))|| userMessage.includes('?')) {
         await chat.sendStateTyping();
 
         // 2.1 Tenta gerar resposta via IA (com fallback)
-        const aiResponse = await generateAIResponse(msg.body, "Você é um chatbot útil chamado MoreiraBot.");
+        const aiResponse = await generateAIResponse(userMessage, "Você é um chatbot útil chamado MoreiraBot.");
 
         if (aiResponse) {
             await client.sendMessage(msg.from, aiResponse);
@@ -150,7 +150,7 @@ client.on('message', async msg => {
     }
 
     // 3. Por último, opções numéricas
-    switch (msg.body) {
+    switch (userMessage) {
         case '1':
             await handleOption1(msg);
             break;
