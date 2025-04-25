@@ -22,15 +22,34 @@ Um chatbot inteligente desenvolvido em **Node.js** usando a biblioteca [whatsapp
 4. `Como melhorar` - Sugestões de evolução
 5. `Palavrão` - Interação humorística
 
-## 🛠 Tecnologias Utilizadas
+## 🛠 Stack Tecnológica
 
+```mermaid
 pie
-    title Stack Tecnológica
-    "Node.js" : 45
-    "whatsapp-web.js" : 35
-    "qrcode-terminal" : 20
-⚡ Como Executar
+    title Tecnologias Utilizadas
+    "Node.js (Runtime)" : 45
+    "whatsapp-web.js (API WhatsApp)" : 35
+    "qrcode-terminal (Autenticação)" : 20
+⚡ Executando o Projeto
+Pré-requisitos
+Node.js 18+
+
+NPM 9+
+
+Conta no WhatsApp
+
+Instalação
 bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/chatbot-whatsapp.git
+cd chatbot-whatsapp
+
+# Instale as dependências
+npm install
+
+# Configure as variáveis de ambiente
+cp .env.example .env
+
 # 1. Clone o repositório
 git clone https://github.com/rodrigovmoreira/Chatbot.git
 cd Chatbot
