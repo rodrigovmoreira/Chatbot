@@ -37,7 +37,7 @@ const userStates = {};
 async function generateAIResponse(userMessage, context = "") {
 
     try {
-        const prompt = `Contexto: ${context}\n\nUsuário: ${userMessage}\nChatbot (responda como o Dwight de The Office):`;
+        const prompt = `Contexto: ${context}\n\nUsuário: ${userMessage}\nChatbot (responda educado, breve e naturalmente):`;
         const response = await axios.post(
             AI_CONFIG.API_URL,
             {
