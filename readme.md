@@ -30,6 +30,7 @@ pie
     "Node.js (Runtime)" : 45
     "whatsapp-web.js (API WhatsApp)" : 35
     "qrcode-terminal (Autenticação)" : 20
+```
 ⚡ Executando o Projeto
 Pré-requisitos
 Node.js 18+
