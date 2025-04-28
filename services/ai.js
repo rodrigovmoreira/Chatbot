@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-async function generateAIResponse(message, context = '') {
+async function generateAIResponse(message, context) {
   try {
     const prompt = `Contexto: ${context}\nUsuário: ${message}\nBot:`;
     const res = await axios.post(

@@ -1,7 +1,7 @@
 const { Client } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { handleMessage } = require('./messageHandler');
-const dbConnect = require('./services/db');
+const dbConnect = require('./services/database');
 require('dotenv').config();
 
 const client = new Client();

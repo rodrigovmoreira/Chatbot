@@ -1,9 +1,9 @@
 // === messageHandler.js ===
 const { getOrCreateSession, setSessionState } = require('./services/session');
-const { simulateTyping, delay } = require('./utils/chatuils');
+const { simulateTyping, delay } = require('./utils/chatutils');
 const { generateAIResponse } = require('./services/ai');
 const menuHandler = require('./handlers/menuHandler');
-const handlers = require('./handlers');
+const handlers = require('./handlers/menuHandler');
 
 async function handleMessage(client, msg) {
   if (!msg.from.endsWith('@c.us')) return;
@@ -33,7 +33,7 @@ async function handleMessage(client, msg) {
 
   if (body.includes('?') || body.split(' ').length > 2) {
     await simulateTyping(chat);
-    const aiResponse = await generateAIResponse(body, 'Você é um assistente chamado MoreiraBot.');
+    const aiResponse = await generateAIResponse(body, 'Você é um assistente chamado Moreira Bot e responde de forma simples e cordial.');
     await client.sendMessage(msg.from, aiResponse || '🤖 Pode repetir? Ainda estou aprendendo.');
   }
 }
