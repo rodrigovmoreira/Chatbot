@@ -1,5 +1,5 @@
 // handlers/menuHandler.js
-const { simulateTyping } = require('../utils/chatutils');
+const { simulateTyping } = require('../utils/chatUtils');
 
 async function menuHandler(client, msg, name = 'Amigo') {
   const chat = await msg.getChat();
