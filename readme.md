@@ -39,3 +39,36 @@ Um chatbot inteligente desenvolvido em **Node.js**, utilizando a biblioteca [wha
 - [Axios](https://axios-http.com/)
 - [dotenv](https://www.npmjs.com/package/dotenv)
 - [qrcode-terminal](https://www.npmjs.com/package/qrcode-terminal)
+
+Depois disso, escaneie o QR Code que aparecerá no terminal com o seu WhatsApp.
+
+📌 Roadmap
+✅ Conexão básica com WhatsApp
+
+✅ Menu interativo via chat
+
+✅ Integração com IA e APIs externas
+
+✅ Armazenamento com MongoDB
+
+🔜 Painel administrativo (Angular)
+
+🔜 Suporte completo a NLP
+
+🔜 Suporte a RAG (busca + IA)
+
+🌟 Destaques
+🔄 Controle de fluxo por estado
+
+💾 Histórico por usuário persistido no MongoDB
+
+🔥 Agendador de mensagens automáticas com cron
+
+🤝 Contribuição
+Contribuições são bem-vindas!
+Sinta-se livre para abrir issues, sugerir melhorias ou enviar pull requests.
+
+📄 Licença
+Este projeto está sob a licença MIT – consulte o arquivo LICENSE para mais detalhes.
+
+Feito com ❤️ por Rodrigo Vasconcelos Moreira
