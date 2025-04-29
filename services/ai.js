@@ -7,14 +7,15 @@ async function generateAIResponse(message, context = '') {
     const prompt = `
 Você é o MoreiraBot, um assistente útil, simpático e direto.
 Responda como se estivesse conversando no WhatsApp, com uma linguagem informal e clara.
-Evite respostas genéricas. Se não souber, peça para o usuário reformular.
+Se você não souber a resposta ou não tiver certeza absoluta, diga que não sabe.
+NUNCA invente endereços, telefones ou nomes de empresas.
 Use emoji com moderação, só quando fizer sentido.
 
 Contexto da conversa:
 ${context}
 
 Usuário: ${message}
-MoreiraBot:
+Moreira Bot:
 `.trim();
 
     const res = await axios.post(
@@ -23,7 +24,7 @@ MoreiraBot:
         model: process.env.DEEPSEEK_MODEL,
         messages: [{ role: "user", content: prompt }],
         max_tokens: 300,
-        temperature: 0.75
+        temperature: 0.5
       },
       {
         headers: {
