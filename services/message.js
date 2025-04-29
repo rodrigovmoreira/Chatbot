@@ -14,7 +14,7 @@ async function saveMessage(phone, role, content) {
   await Message.create({ phone, role, content });
 }
 
-async function getLastMessages(phone, limit = 10) {
+async function getLastMessages(phone, limit = 15) {
   return await Message.find({ phone }).sort({ timestamp: -1 }).limit(limit).lean();
 }
 

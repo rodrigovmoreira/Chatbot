@@ -63,7 +63,7 @@ async function handleMessage(client, msg) {
     }
 
     // Mensagem longa ou pergunta — IA entra
-    if (body.includes('?') || body.split(' ').length > 2) {
+    if (body.includes('?') || body.split(' ').length > 0) {
       await simulateTyping(chat);
 
       // 🔵 Antes de enviar para IA, buscar histórico
