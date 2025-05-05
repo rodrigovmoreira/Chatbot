@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ChatBot Manager</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos Gerais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: all 0.3s;
+        }
+
+        /* Tela de Login */
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            padding: 40px 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .login-logo {
+            margin-bottom: 30px;
+        }
+
+        .login-logo i {
+            font-size: 3.5rem;
+            color: #4F46E5;
+            margin-bottom: 15px;
+        }
+
+        .login-logo h1 {
+            font-size: 1.8rem;
+            color: #333;
+        }
+
+        .login-form {
+            width: 100%;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #4F46E5;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember-me input {
+            margin-right: 8px;
+        }
+
+        .forgot-password a {
+            color: #4F46E5;
+            text-decoration: none;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #4F46E5 0%, #6D28D9 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
+        }
+
+        .social-login {
+            margin-bottom: 20px;
+        }
+
+        .social-login p {
+            color: #777;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .social-login p::before,
+        .social-login p::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background: #ddd;
+        }
+
+        .social-login p::before {
+            left: 0;
+        }
+
+        .social-login p::after {
+            right: 0;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .social-icon.google {
+            background: #DB4437;
+        }
+
+        .social-icon.facebook {
+            background: #4267B2;
+        }
+
+        .social-icon.microsoft {
+            background: #0078D7;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+        }
+
+        .register-link {
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        .register-link a {
+            color: #4F46E5;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Dashboard (oculto inicialmente) */
+        .dashboard {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* ... (os estilos do dashboard permanecem iguais ao código anterior) ... */
+    </style>
+</head>
+<body>
+    <!-- Tela de Login -->
+    <div class="login-container" id="loginPage">
+        <div class="login-logo">
+            <i class="fas fa-robot"></i>
+            <h1>ChatBot Manager</h1>
+        </div>
+
+        <form class="login-form" id="loginForm">
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" placeholder="E-mail" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" placeholder="Senha" required>
+            </div>
+
+            <div class="remember-forgot">
+                <div class="remember-me">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Lembrar-me</label>
+                </div>
+                <div class="forgot-password">
+                    <a href="#">Esqueceu a senha?</a>
+                </div>
+            </div>
+
+            <button type="submit" class="login-button">Entrar</button>
+
+            <div class="social-login">
+                <p>Ou entre com</p>
+                <div class="social-icons">
+                    <div class="social-icon google">
+                        <i class="fab fa-google"></i>
+                    </div>
+                    <div class="social-icon facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
+                    <div class="social-icon microsoft">
+                        <i class="fab fa-microsoft"></i>
+                    </div>
+                </div>
+            </div>
+
+            <p class="register-link">
+                Não tem uma conta? <a href="#">Registre-se</a>
+            </p>
+        </form>
+    </div>
+
+    <!-- Dashboard (oculto inicialmente) -->
+    <div class="dashboard" id="dashboard">
+        <!-- ... (todo o conteúdo do dashboard do código anterior aqui) ... -->
+    </div>
+
+    <script>
+        // Simulação de login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Validação simples (em um sistema real, faria uma chamada à API)
+            if (email && password) {
+                // Esconde o login e mostra o dashboard
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'flex';
+                
+                // Simula carregamento (opcional)
+                setTimeout(() => {
+                    alert('Login bem-sucedido! Bem-vindo ao painel.');
+                }, 500);
+            } else {
+                alert('Por favor, preencha todos os campos.');
+            }
+        });
+
+        // Botão de logout fictício (adicionar no dashboard)
+        function logout() {
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('loginForm').reset();
+        }
+    </script>
+</body>
+</html>
