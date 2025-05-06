@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuários - ChatBot Manager</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset e Fontes */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        /* Layout Principal */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar (manter igual às outras telas) */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #4F46E5 0%, #6D28D9 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            text-align: center;
+            padding: 20px 0 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo h2 {
+            font-size: 1.5rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .nav-menu {
+            margin-top: 30px;
+        }
+
+        .nav-item {
+            padding: 12px 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid white;
+        }
+
+        .nav-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Conteúdo Principal */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            color: #4F46E5;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        /* Barra de Ações */
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 30px;
+            width: 300px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-bar input {
+            border: none;
+            outline: none;
+            width: 100%;
+            margin-left: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #4F46E5;
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #3a36b3;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: #f5f5f5;
+        }
+
+        /* Tabela de Usuários */
+        .users-table {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 2fr 2fr 1fr 1fr 1fr;
+            padding: 15px 20px;
+            background: #f9f9f9;
+            font-weight: bold;
+            color: #666;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .user-row {
+            display: grid;
+            grid-template-columns: 2fr 2fr 1fr 1fr 1fr;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .user-row:hover {
+            background: #f5f7fa;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #4F46E5;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .user-name {
+            font-weight: bold;
+        }
+
+        .user-email {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .user-role {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .role-admin {
+            background: #E3F9E5;
+            color: #4CAF50;
+        }
+
+        .role-manager {
+            background: #E3F2FD;
+            color: #2196F3;
+        }
+
+        .role-agent {
+            background: #FFF3E0;
+            color: #FF9800;
+        }
+
+        .user-status {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .status-active {
+            background: #4CAF50;
+        }
+
+        .status-inactive {
+            background: #F44336;
+        }
+
+        .status-pending {
+            background: #FFC107;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            color: #4F46E5;
+            transform: scale(1.1);
+        }
+
+        /* Modal de Usuário */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            border-color: #4F46E5;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* Responsividade */
+        @media (max-width: 1200px) {
+            .table-header, .user-row {
+                grid-template-columns: 2fr 1fr 1fr 1fr;
+            }
+            
+            .user-email {
+                display: none;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .table-header {
+                display: none;
+            }
+            
+            .user-row {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .user-actions {
+                justify-content: flex-start;
+                margin-top: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                overflow: hidden;
+            }
+            
+            .logo h2, .nav-item span {
+                display: none;
+            }
+            
+            .nav-item {
+                justify-content: center;
+            }
+            
+            .action-bar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .search-bar {
+                width: 100%;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-robot"></i>
+                <h2>ChatBot Manager</h2>
+            </div>
+            
+            <div class="nav-menu">
+                <div class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-comments"></i>
+                    <span>Conversas</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Configurações</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Estatísticas</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-database"></i>
+                    <span>Base de Conhecimento</span>
+                </div>
+                <div class="nav-item active">
+                    <i class="fas fa-users"></i>
+                    <span>Usuários</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Conteúdo Principal -->
+        <div class="main-content">
+            <div class="header">
+                <h1 class="page-title"><i class="fas fa-users"></i> Gerenciamento de Usuários</h1>
+                <div class="user-actions">
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-file-export"></i> Exportar
+                    </button>
+                </div>
+            </div>
+            
+            <div class="action-bar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar usuários...">
+                </div>
+                <button class="btn btn-primary" id="addUserBtn">
+                    <i class="fas fa-plus"></i> Novo Usuário
+                </button>
+            </div>
+            
+            <div class="users-table">
+                <div class="table-header">
+                    <div>Usuário</div>
+                    <div>Email</div>
+                    <div>Cargo</div>
+                    <div>Status</div>
+                    <div>Ações</div>
+                </div>
+                
+                <!-- Exemplo de usuários -->
+                <div class="user-row">
+                    <div class="user-info">
+                        <div class="user-avatar">AD</div>
+                        <div>
+                            <div class="user-name">Admin User</div>
+                            <div class="user-email">admin@empresa.com</div>
+                        </div>
+                    </div>
+                    <div class="user-email">admin@empresa.com</div>
+                    <div>
+                        <span class="user-role role-admin">Administrador</span>
+                    </div>
+                    <div>
+                        <span class="user-status status-active"></span> Ativo
+                    </div>
+                    <div class="user-actions">
+                        <button class="action-btn" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn" title="Reenviar convite">
+                            <i class="fas fa-envelope"></i>
+                        </button>
+                        <button class="action-btn" title="Desativar">
+                            <i class="fas fa-ban"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="user-row">
+                    <div class="user-info">
+                        <div class="user-avatar">GR</div>
+                        <div>
+                            <div class="user-name">Gerente Regional</div>
+                            <div class="user-email">gerente@empresa.com</div>
+                        </div>
+                    </div>
+                    <div class="user-email">gerente@empresa.com</div>
+                    <div>
+                        <span class="user-role role-manager">Gerente</span>
+                    </div>
+                    <div>
+                        <span class="user-status status-active"></span> Ativo
+                    </div>
+                    <div class="user-actions">
+                        <button class="action-btn" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn" title="Reenviar convite">
+                            <i class="fas fa-envelope"></i>
+                        </button>
+                        <button class="action-btn" title="Desativar">
+                            <i class="fas fa-ban"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="user-row">
+                    <div class="user-info">
+                        <div class="user-avatar">AT</div>
+                        <div>
+                            <div class="user-name">Atendente 1</div>
+                            <div class="user-email">atendente1@empresa.com</div>
+                        </div>
+                    </div>
+                    <div class="user-email">atendente1@empresa.com</div>
+                    <div>
+                        <span class="user-role role-agent">Atendente</span>
+                    </div>
+                    <div>
+                        <span class="user-status status-active"></span> Ativo
+                    </div>
+                    <div class="user-actions">
+                        <button class="action-btn" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn" title="Reenviar convite">
+                            <i class="fas fa-envelope"></i>
+                        </button>
+                        <button class="action-btn" title="Desativar">
+                            <i class="fas fa-ban"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="user-row">
+                    <div class="user-info">
+                        <div class="user-avatar">NV</div>
+                        <div>
+                            <div class="user-name">Novo Usuário</div>
+                            <div class="user-email">novo@empresa.com</div>
+                        </div>
+                    </div>
+                    <div class="user-email">novo@empresa.com</div>
+                    <div>
+                        <span class="user-role role-agent">Atendente</span>
+                    </div>
+                    <div>
+                        <span class="user-status status-pending"></span> Pendente
+                    </div>
+                    <div class="user-actions">
+                        <button class="action-btn" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn" title="Reenviar convite">
+                            <i class="fas fa-envelope"></i>
+                        </button>
+                        <button class="action-btn" title="Cancelar">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="user-row">
+                    <div class="user-info">
+                        <div class="user-avatar">EX</div>
+                        <div>
+                            <div class="user-name">Ex-Usuário</div>
+                            <div class="user-email">ex@empresa.com</div>
+                        </div>
+                    </div>
+                    <div class="user-email">ex@empresa.com</div>
+                    <div>
+                        <span class="user-role role-agent">Atendente</span>
+                    </div>
+                    <div>
+                        <span class="user-status status-inactive"></span> Inativo
+                    </div>
+                    <div class="user-actions">
+                        <button class="action-btn" title="Reativar">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button class="action-btn" title="Excluir">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Usuário -->
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Adicionar Novo Usuário</h2>
+                <button class="action-btn" id="closeModalBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="userForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="firstName">Nome</label>
+                            <input type="text" class="form-control" id="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="lastName">Sobrenome</label>
+                            <input type="text" class="form-control" id="lastName" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="userEmail">Email</label>
+                        <input type="email" class="form-control" id="userEmail" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="userRole">Cargo</label>
+                            <select class="form-control" id="userRole" required>
+                                <option value="agent">Atendente</option>
+                                <option value="manager">Gerente</option>
+                                <option value="admin">Administrador</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="userStatus">Status</label>
+                            <select class="form-control" id="userStatus" required>
+                                <option value="active">Ativo</option>
+                                <option value="inactive">Inativo</option>
+                                <option value="pending">Pendente</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="userPermissions">Permissões</label>
+                        <div style="background: #f9f9f9; padding: 15px; border-radius: 5px;">
+                            <div style="margin-bottom: 10px;">
+                                <input type="checkbox" id="permDashboard" checked>
+                                <label for="permDashboard">Acesso ao Dashboard</label>
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <input type="checkbox" id="permConversations" checked>
+                                <label for="permConversations">Gerenciar Conversas</label>
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <input type="checkbox" id="permKnowledge">
+                                <label for="permKnowledge">Editar Base de Conhecimento</label>
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <input type="checkbox" id="permSettings">
+                                <label for="permSettings">Acesso às Configurações</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="permUsers">
+                                <label for="permUsers">Gerenciar Usuários</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelBtn">Cancelar</button>
+                <button class="btn btn-primary" id="saveBtn">Salvar Usuário</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Controle do Modal
+        const modal = document.getElementById('userModal');
+        const addUserBtn = document.getElementById('addUserBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        
+        function openModal() {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        addUserBtn.addEventListener('click', openModal);
+        closeModalBtn.addEventListener('click', closeModal);
+        cancelBtn.addEventListener('click', closeModal);
+        
+        // Fechar modal ao clicar fora
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+        
+        // Edição de usuários existentes
+        const editBtns = document.querySelectorAll('.action-btn .fa-edit');
+        editBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.getElementById('modalTitle').textContent = 'Editar Usuário';
+                // Aqui você preencheria o modal com os dados do usuário
+                openModal();
+            });
+        });
+        
+        // Simulação de salvamento
+        document.getElementById('saveBtn').addEventListener('click', function() {
+            // Aqui você enviaria os dados para o back-end
+            alert('Usuário salvo com sucesso!');
+            closeModal();
+            // Recarregar a lista de usuários
+        });
+        
+        // Controle de status (ativar/desativar)
+        const statusBtns = document.querySelectorAll('.action-btn .fa-ban, .action-btn .fa-check');
+        statusBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const row = this.closest('.user-row');
+                const statusElement = row.querySelector('.user-status');
+                
+                if (this.classList.contains('fa-ban')) {
+                    if (confirm('Tem certeza que deseja desativar este usuário?')) {
+                        statusElement.classList.remove('status-active', 'status-pending');
+                        statusElement.classList.add('status-inactive');
+                        statusElement.nextSibling.textContent = ' Inativo';
+                        this.classList.replace('fa-ban', 'fa-check');
+                        this.title = 'Reativar';
+                    }
+                } else {
+                    statusElement.classList.remove('status-inactive');
+                    statusElement.classList.add('status-active');
+                    statusElement.nextSibling.textContent = ' Ativo';
+                    this.classList.replace('fa-check', 'fa-ban');
+                    this.title = 'Desativar';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
