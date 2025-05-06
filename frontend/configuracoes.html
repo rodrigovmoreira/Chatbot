@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - ChatBot Manager</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset e Fontes */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        /* Layout Principal */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #4F46E5 0%, #6D28D9 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            text-align: center;
+            padding: 20px 0 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo h2 {
+            font-size: 1.5rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .nav-menu {
+            margin-top: 30px;
+        }
+
+        .nav-item {
+            padding: 12px 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid white;
+        }
+
+        .nav-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Conteúdo Principal */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            color: #4F46E5;
+        }
+
+        /* Seção de Configurações */
+        .settings-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #4F46E5;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-right: 10px;
+        }
+
+        /* Card de Conexão WhatsApp */
+        .whatsapp-card {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .whatsapp-icon {
+            font-size: 2.5rem;
+            color: #25D366;
+            margin-right: 20px;
+        }
+
+        .whatsapp-info {
+            flex: 1;
+        }
+
+        .whatsapp-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-connected {
+            background: #E3F9E5;
+            color: #25D366;
+        }
+
+        .status-disconnected {
+            background: #FFEBEE;
+            color: #F44336;
+        }
+
+        .qr-code-container {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px dashed #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            background: white;
+            padding: 10px;
+            border: 1px solid #eee;
+        }
+
+        .qr-instructions {
+            margin-top: 15px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #4F46E5;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #3a36b3;
+        }
+
+        .btn-secondary {
+            background: #f5f7fa;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .btn-danger {
+            background: #F44336;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d32f2f;
+        }
+
+        /* Configurações de IA */
+        .ai-settings {
+            margin-top: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            border-color: #4F46E5;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                overflow: hidden;
+            }
+            
+            .logo h2, .nav-item span {
+                display: none;
+            }
+            
+            .nav-item {
+                justify-content: center;
+            }
+
+            .whatsapp-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .whatsapp-icon {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-robot"></i>
+                <h2>ChatBot Manager</h2>
+            </div>
+            
+            <div class="nav-menu">
+                <div class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-comments"></i>
+                    <span>Conversas</span>
+                </div>
+                <div class="nav-item active">
+                    <i class="fas fa-cog"></i>
+                    <span>Configurações</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Estatísticas</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-database"></i>
+                    <span>Base de Conhecimento</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Conteúdo Principal -->
+        <div class="main-content">
+            <div class="header">
+                <h1 class="page-title"><i class="fas fa-cog"></i> Configurações</h1>
+            </div>
+            
+            <!-- Seção de Conexão WhatsApp -->
+            <div class="settings-section">
+                <h2 class="section-title"><i class="fab fa-whatsapp"></i> Conexão WhatsApp</h2>
+                
+                <div class="whatsapp-card">
+                    <div class="whatsapp-icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <div class="whatsapp-info">
+                        <h3>Status da Conexão</h3>
+                        <p>Conecte seu bot ao WhatsApp Web para começar a receber mensagens</p>
+                        <span class="whatsapp-status status-disconnected" id="connectionStatus">Desconectado</span>
+                    </div>
+                </div>
+                
+                <div id="qrCodeSection">
+                    <h3>Autenticação via QR Code</h3>
+                    <p>Escaneie o QR Code abaixo com o aplicativo do WhatsApp no seu celular:</p>
+                    
+                    <div class="qr-code-container">
+                        <div class="qr-code" id="qrCode">
+                            <!-- QR Code será gerado aqui -->
+                            <p style="color: #999; margin-top: 80px;">Aguardando geração do QR Code...</p>
+                        </div>
+                        <p class="qr-instructions">
+                            1. Abra o WhatsApp no seu celular<br>
+                            2. Toque em <strong>Menu → Dispositivos conectados</strong><br>
+                            3. Toque em <strong>Conectar um dispositivo</strong><br>
+                            4. Aponte a câmera para o QR Code acima
+                        </p>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" id="startConnectionBtn">
+                            <i class="fas fa-sync-alt"></i> Gerar Novo QR Code
+                        </button>
+                        <button class="btn btn-danger" id="disconnectBtn" disabled>
+                            <i class="fas fa-power-off"></i> Desconectar
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Seção de Configurações de IA -->
+            <div class="settings-section ai-settings">
+                <h2 class="section-title"><i class="fas fa-brain"></i> Configurações de IA</h2>
+                
+                <div class="form-group">
+                    <label class="form-label" for="apiKey">Chave da API (DeepSeek)</label>
+                    <input type="password" class="form-control" id="apiKey" placeholder="Insira sua chave da API">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="aiModel">Modelo de IA</label>
+                    <select class="form-control" id="aiModel">
+                        <option value="deepseek-chat">DeepSeek Chat</option>
+                        <option value="deepseek-coder">DeepSeek Coder</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="aiTemperature">Criatividade (Temperatura)</label>
+                    <input type="range" class="form-control" id="aiTemperature" min="0" max="1" step="0.1" value="0.5">
+                    <span id="temperatureValue">0.5</span> (0 = conservador, 1 = criativo)
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="saveSettingsBtn">
+                        <i class="fas fa-save"></i> Salvar Configurações
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Elementos da interface
+        const qrCodeElement = document.getElementById('qrCode');
+        const startConnectionBtn = document.getElementById('startConnectionBtn');
+        const disconnectBtn = document.getElementById('disconnectBtn');
+        const connectionStatus = document.getElementById('connectionStatus');
+        const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+        const temperatureSlider = document.getElementById('aiTemperature');
+        const temperatureValue = document.getElementById('temperatureValue');
+
+        // Atualizar valor do slider de temperatura
+        temperatureSlider.addEventListener('input', function() {
+            temperatureValue.textContent = this.value;
+        });
+
+        // Simulação de conexão WhatsApp (substituir por conexão real com seu back-end)
+        startConnectionBtn.addEventListener('click', function() {
+            startConnectionBtn.disabled = true;
+            startConnectionBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gerando QR Code...';
+            
+            // Simular delay de geração do QR Code
+            setTimeout(() => {
+                // Aqui você faria uma chamada para seu back-end para obter o QR Code real
+                // Exemplo com QR Code estático para demonstração
+                qrCodeElement.innerHTML = '<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://whatsapp.com/device" alt="QR Code">';
+                
+                startConnectionBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Gerar Novo QR Code';
+                startConnectionBtn.disabled = false;
+                
+                // Simular conexão após 5 segundos (remover em produção)
+                setTimeout(() => {
+                    updateConnectionStatus(true);
+                }, 5000);
+            }, 2000);
+        });
+
+        disconnectBtn.addEventListener('click', function() {
+            if (confirm('Tem certeza que deseja desconectar o WhatsApp?')) {
+                // Aqui você faria uma chamada para seu back-end para desconectar
+                updateConnectionStatus(false);
+            }
+        });
+
+        // Função para atualizar o status da conexão
+        function updateConnectionStatus(isConnected) {
+            if (isConnected) {
+                connectionStatus.textContent = 'Conectado';
+                connectionStatus.classList.remove('status-disconnected');
+                connectionStatus.classList.add('status-connected');
+                disconnectBtn.disabled = false;
+                startConnectionBtn.style.display = 'none';
+            } else {
+                connectionStatus.textContent = 'Desconectado';
+                connectionStatus.classList.remove('status-connected');
+                connectionStatus.classList.add('status-disconnected');
+                disconnectBtn.disabled = true;
+                startConnectionBtn.style.display = 'inline-block';
+                qrCodeElement.innerHTML = '<p style="color: #999; margin-top: 80px;">Aguardando geração do QR Code...</p>';
+            }
+        }
+
+        // Salvar configurações de IA
+        saveSettingsBtn.addEventListener('click', function() {
+            const apiKey = document.getElementById('apiKey').value;
+            const aiModel = document.getElementById('aiModel').value;
+            const temperature = temperatureSlider.value;
+            
+            // Aqui você faria uma chamada para seu back-end para salvar as configurações
+            console.log('Configurações salvas:', { apiKey, aiModel, temperature });
+            
+            // Feedback visual
+            saveSettingsBtn.innerHTML = '<i class="fas fa-check"></i> Configurações salvas!';
+            setTimeout(() => {
+                saveSettingsBtn.innerHTML = '<i class="fas fa-save"></i> Salvar Configurações';
+            }, 2000);
+        });
+
+        // Integração real com o back-end (WebSocket para receber o QR Code)
+        function setupWebSocket() {
+            // Substitua pela URL do seu servidor WebSocket
+            const socket = new WebSocket('ws://localhost:3000/whatsapp-status');
+            
+            socket.onopen = function(e) {
+                console.log('Conectado ao servidor WebSocket');
+            };
+            
+            socket.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                
+                if (data.type === 'qr') {
+                    // Gerar QR Code no elemento
+                    qrCodeElement.innerHTML = `<img src="${data.qr}" alt="QR Code">`;
+                    startConnectionBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Gerar Novo QR Code';
+                    startConnectionBtn.disabled = false;
+                }
+                
+                if (data.type === 'status') {
+                    updateConnectionStatus(data.connected);
+                }
+            };
+            
+            socket.onclose = function(event) {
+                if (event.wasClean) {
+                    console.log(`Conexão fechada limpamente, código=${event.code} motivo=${event.reason}`);
+                } else {
+                    console.log('Conexão perdida');
+                }
+            };
+            
+            socket.onerror = function(error) {
+                console.log(`Erro WebSocket: ${error.message}`);
+            };
+        }
+
+        // Iniciar WebSocket quando a página carregar
+        window.addEventListener('load', setupWebSocket);
+    </script>
+</body>
+</html>

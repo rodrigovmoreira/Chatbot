@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversas - ChatBot Manager</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset e Fontes */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        /* Layout Principal */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #4F46E5 0%, #6D28D9 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            text-align: center;
+            padding: 20px 0 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo h2 {
+            font-size: 1.5rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .nav-menu {
+            margin-top: 30px;
+        }
+
+        .nav-item {
+            padding: 12px 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid white;
+        }
+
+        .nav-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Conteúdo Principal */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 10;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: #f5f7fa;
+            padding: 10px 15px;
+            border-radius: 30px;
+            width: 300px;
+        }
+
+        .search-bar input {
+            border: none;
+            outline: none;
+            width: 100%;
+            margin-left: 10px;
+            background: transparent;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* Painel de Conversas */
+        .conversations-panel {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Lista de Conversas */
+        .conversation-list {
+            width: 350px;
+            border-right: 1px solid #eee;
+            background: white;
+            overflow-y: auto;
+            height: calc(100vh - 70px);
+        }
+
+        .list-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-title {
+            font-weight: bold;
+        }
+
+        .list-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .list-action-btn {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .conversation-filter {
+            padding: 10px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .filter-tabs {
+            display: flex;
+            background: #f5f7fa;
+            border-radius: 8px;
+            padding: 3px;
+        }
+
+        .filter-tab {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            border-radius: 5px;
+        }
+
+        .filter-tab.active {
+            background: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+        }
+
+        .conversation-item {
+            display: flex;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .conversation-item:hover {
+            background: #f9f9f9;
+        }
+
+        .conversation-item.active {
+            background: #f0f4ff;
+        }
+
+        .conversation-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #4F46E5;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .conversation-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .conversation-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .conversation-user {
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .conversation-time {
+            font-size: 0.7rem;
+            color: #999;
+            flex-shrink: 0;
+            margin-left: 10px;
+        }
+
+        .conversation-preview {
+            font-size: 0.8rem;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .conversation-status {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-left: 5px;
+        }
+
+        .status-unread {
+            background: #4CAF50;
+        }
+
+        .status-pending {
+            background: #FF9800;
+        }
+
+        /* Área de Mensagens */
+        .message-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #f9f9f9;
+        }
+
+        .message-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .message-user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .message-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #4F46E5;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .message-user-name {
+            font-weight: bold;
+        }
+
+        .message-user-status {
+            font-size: 0.8rem;
+            color: #4CAF50;
+            margin-top: 3px;
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .message-action-btn {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .message-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f5f7fa;
+        }
+
+        .message {
+            max-width: 70%;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 18px;
+            position: relative;
+            word-wrap: break-word;
+        }
+
+        .message-incoming {
+            background: white;
+            border-top-left-radius: 5px;
+            margin-right: auto;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .message-outgoing {
+            background: #4F46E5;
+            color: white;
+            border-top-right-radius: 5px;
+            margin-left: auto;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: #999;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .message-outgoing .message-time {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .message-input-area {
+            padding: 15px 20px;
+            background: white;
+            border-top: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .message-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            outline: none;
+            resize: none;
+            max-height: 120px;
+        }
+
+        .message-input:focus {
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        .send-btn {
+            background: #4F46E5;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .send-btn:hover {
+            background: #3a36b3;
+            transform: scale(1.05);
+        }
+
+        /* Responsividade */
+        @media (max-width: 1200px) {
+            .conversation-list {
+                width: 300px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .conversation-list {
+                width: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                overflow: hidden;
+            }
+            
+            .logo h2, .nav-item span {
+                display: none;
+            }
+            
+            .nav-item {
+                justify-content: center;
+            }
+
+            .conversation-list {
+                position: absolute;
+                z-index: 100;
+                height: calc(100vh - 70px);
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+
+            .conversation-list.open {
+                transform: translateX(0);
+            }
+
+            .message-area {
+                width: 100%;
+            }
+
+            .back-to-list {
+                display: block !important;
+            }
+        }
+
+        /* Elementos específicos para mobile */
+        .back-to-list {
+            display: none;
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .search-bar {
+                width: auto;
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-robot"></i>
+                <h2>ChatBot Manager</h2>
+            </div>
+            
+            <div class="nav-menu">
+                <div class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item active">
+                    <i class="fas fa-comments"></i>
+                    <span>Conversas</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Configurações</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Estatísticas</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-database"></i>
+                    <span>Base de Conhecimento</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Usuários</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Conteúdo Principal -->
+        <div class="main-content">
+            <div class="header">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Pesquisar conversas...">
+                </div>
+                
+                <div class="user-profile">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Usuário">
+                    <span>Ana Silva</span>
+                </div>
+            </div>
+            
+            <!-- Painel de Conversas -->
+            <div class="conversations-panel">
+                <!-- Lista de Conversas -->
+                <div class="conversation-list" id="conversationList">
+                    <div class="list-header">
+                        <div class="list-title">Conversas</div>
+                        <div class="list-actions">
+                            <button class="list-action-btn" title="Atualizar">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                            <button class="list-action-btn" title="Filtrar">
+                                <i class="fas fa-filter"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="conversation-filter">
+                        <div class="filter-tabs">
+                            <div class="filter-tab active">Todas</div>
+                            <div class="filter-tab">Não lidas</div>
+                            <div class="filter-tab">Pendentes</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Lista de conversas -->
+                    <div class="conversation-item active">
+                        <div class="conversation-avatar" style="background: #4CAF50;">JP</div>
+                        <div class="conversation-info">
+                            <div class="conversation-header">
+                                <div class="conversation-user">João Pereira</div>
+                                <div class="conversation-time">10:45</div>
+                            </div>
+                            <div class="conversation-preview">Olá, como posso redefinir minha senha?</div>
+                        </div>
+                    </div>
+                    
+                    <div class="conversation-item">
+                        <div class="conversation-avatar" style="background: #F44336;">AM</div>
+                        <div class="conversation-info">
+                            <div class="conversation-header">
+                                <div class="conversation-user">Ana Mendes <span class="conversation-status status-unread"></span></div>
+                                <div class="conversation-time">09:32</div>
+                            </div>
+                            <div class="conversation-preview">Preciso de ajuda com meu pedido #12345</div>
+                        </div>
+                    </div>
+                    
+                    <div class="conversation-item">
+                        <div class="conversation-avatar" style="background: #FF9800;">CS</div>
+                        <div class="conversation-info">
+                            <div class="conversation-header">
+                                <div class="conversation-user">Carlos Silva <span class="conversation-status status-pending"></span></div>
+                                <div class="conversation-time">Ontem</div>
+                            </div>
+                            <div class="conversation-preview">Obrigado, minha dúvida foi resolvida!</div>
+                        </div>
+                    </div>
+                    
+                    <div class="conversation-item">
+                        <div class="conversation-avatar" style="background: #9C27B0;">MR</div>
+                        <div class="conversation-info">
+                            <div class="conversation-header">
+                                <div class="conversation-user">Maria Rocha</div>
+                                <div class="conversation-time">Ontem</div>
+                            </div>
+                            <div class="conversation-preview">Quais são os planos disponíveis?</div>
+                        </div>
+                    </div>
+                    
+                    <div class="conversation-item">
+                        <div class="conversation-avatar" style="background: #607D8B;">PF</div>
+                        <div class="conversation-info">
+                            <div class="conversation-header">
+                                <div class="conversation-user">Pedro Fernandes</div>
+                                <div class="conversation-time">Qua</div>
+                            </div>
+                            <div class="conversation-preview">Vocês têm suporte 24 horas?</div>
+                        </div>
+                    </div>
+                    
+                    <div class="conversation-item">
+                        <div class="conversation-avatar" style="background: #795548;">LM</div>
+                        <div class="conversation-info">
+                            <div class="conversation-header">
+                                <div class="conversation-user">Luana Mendonça</div>
+                                <div class="conversation-time">Ter</div>
+                            </div>
+                            <div class="conversation-preview">Como faço para cancelar minha assinatura?</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Área de Mensagens -->
+                <div class="message-area">
+                    <div class="message-header">
+                        <button class="back-to-list" id="backToList">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <div class="message-user-info">
+                            <div class="message-user-avatar">JP</div>
+                            <div>
+                                <div class="message-user-name">João Pereira</div>
+                                <div class="message-user-status">Online</div>
+                            </div>
+                        </div>
+                        <div class="message-actions">
+                            <button class="message-action-btn" title="Informações">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                            <button class="message-action-btn" title="Arquivar">
+                                <i class="fas fa-archive"></i>
+                            </button>
+                            <button class="message-action-btn" title="Mais opções">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="message-container" id="messageContainer">
+                        <div class="message message-incoming">
+                            Olá, como posso redefinir minha senha?
+                            <div class="message-time">10:45</div>
+                        </div>
+                        
+                        <div class="message message-outgoing">
+                            Claro, João! Vou te ajudar com isso. Acesse "Configurações da conta" no menu principal e depois clique em "Redefinir senha".
+                            <div class="message-time">10:46</div>
+                        </div>
+                        
+                        <div class="message message-incoming">
+                            Não estou encontrando essa opção. Pode me mostrar uma print da tela?
+                            <div class="message-time">10:48</div>
+                        </div>
+                        
+                        <div class="message message-outgoing">
+                            <img src="https://via.placeholder.com/300x200?text=Print+da+tela" alt="Print da tela" style="max-width: 100%; border-radius: 8px; margin-bottom: 5px;">
+                            Veja se consegue visualizar agora. Está destacado em vermelho na imagem.
+                            <div class="message-time">10:49</div>
+                        </div>
+                        
+                        <div class="message message-incoming">
+                            Ah, agora entendi! Muito obrigado pela ajuda.
+                            <div class="message-time">10:50</div>
+                        </div>
+                    </div>
+                    
+                    <div class="message-input-area">
+                        <button class="message-action-btn" title="Anexar arquivo">
+                            <i class="fas fa-paperclip"></i>
+                        </button>
+                        <textarea class="message-input" placeholder="Digite sua mensagem..." rows="1"></textarea>
+                        <button class="send-btn" title="Enviar">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Menu mobile
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('open');
+        });
+
+        // Filtro de conversas
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                filterTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                // Aqui você filtraria a lista de conversas
+            });
+        });
+
+        // Seleção de conversa
+        const conversationItems = document.querySelectorAll('.conversation-item');
+        conversationItems.forEach(item => {
+            item.addEventListener('click', function() {
+                conversationItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Em telas pequenas, mostra a área de mensagens
+                if (window.innerWidth <= 768) {
+                    document.getElementById('conversationList').classList.remove('open');
+                }
+            });
+        });
+
+        // Voltar para lista em mobile
+        document.getElementById('backToList').addEventListener('click', function() {
+            document.getElementById('conversationList').classList.add('open');
+        });
+
+        // Auto-ajuste da altura do textarea
+        const messageInput = document.querySelector('.message-input');
+        messageInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // Enviar mensagem
+        document.querySelector('.send-btn').addEventListener('click', function() {
+            const messageText = messageInput.value.trim();
+            if (messageText) {
+                // Criar nova mensagem
+                const messageContainer = document.getElementById('messageContainer');
+                const newMessage = document.createElement('div');
+                newMessage.className = 'message message-outgoing';
+                newMessage.innerHTML = `
+                    ${messageText}
+                    <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                `;
+                messageContainer.appendChild(newMessage);
+                
+                // Limpar input
+                messageInput.value = '';
+                messageInput.style.height = 'auto';
+                
+                // Rolagem automática
+                messageContainer.scrollTop = messageContainer.scrollHeight;
+                
+                // Simular resposta do bot
+                setTimeout(() => {
+                    const botResponse = document.createElement('div');
+                    botResponse.className = 'message message-incoming';
+                    botResponse.innerHTML = `
+                        Obrigado pela sua mensagem! Estamos analisando sua solicitação.
+                        <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                    `;
+                    messageContainer.appendChild(botResponse);
+                    messageContainer.scrollTop = messageContainer.scrollHeight;
+                }, 1000);
+            }
+        });
+
+        // Enviar mensagem com Enter (sem Shift)
+        messageInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                document.querySelector('.send-btn').click();
+            }
+        });
+
+        // Rolagem inicial para baixo
+        window.addEventListener('load', function() {
+            const messageContainer = document.getElementById('messageContainer');
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        });
+
+        // Mostrar/ocultar lista em mobile
+        function handleResize() {
+            if (window.innerWidth > 768) {
+                document.getElementById('conversationList').style.transform = 'translateX(0)';
+            } else {
+                document.getElementById('conversationList').style.transform = 'translateX(-100%)';
+            }
+        }
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+    </script>
+</body>
+</html>
